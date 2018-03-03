@@ -1,0 +1,10 @@
+version: '3'
+services:
+  frontend:
+    image: node:latest
+    command: npm start
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/usr/src
+    working_dir: /usr/src
