@@ -1,50 +1,38 @@
-body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-}
+table { width: 100%; }
 
-ol, ul {
-  padding-left: 30px;
+thead {}
+tr.review-table-head-row {
+    border-top: 1px solid #0277BD;
+    border-bottom: 1px solid #0277BD;
+    background: #039BE5;
+    font-family: arial;
+    color: #FFF;
+    font-weight: 600;
 }
+th{
+    border: 1px solid #CFD8DC;
+    padding: 2px 10px;
+}
+th span {display: block;}
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+tr.review-table-body-row {
+    cursor: pointer;
 }
+tr.review-table-body-row:hover td {
+    background: #B3E5FC;
+}
+.review-table-body-row-field-status-warn {padding: 10px; border-bottom: 1px solid #CFD8DC; background: #FF9800;}
+.review-table-body-row-field-status-rjct {padding: 10px; border-bottom: 1px solid #CFD8DC; background: #F44336;}
+.review-table-body-row-field-status-acpt {padding: 10px; border-bottom: 1px solid #CFD8DC; background: #4CAF50;}
 
-.status {
-  margin-bottom: 10px;
+td.review-table-body-row-field {
+    border: 1px solid #CFD8DC;
+    padding: 2px 10px;
+    background: #FFF;
 }
-
-.square {
-  background: #fff;
-  border: 1px solid #999;
-  float: left;
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 34px;
-  height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 0;
-  text-align: center;
-  width: 34px;
-}
-
-.square:focus {
-  outline: none;
-}
-
-.kbd-navigation .square:focus {
-  background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
-}
+td.review-table-body-row-field-string {}
+td.review-table-body-row-field-bool {}
+td.review-table-body-row-field-decimal {text-align: right;}
+td.review-table-body-row-field-int {text-align: right;}
+td.review-table-body-row-field-date {}
+td.review-table-body-row-field-datetime {}
