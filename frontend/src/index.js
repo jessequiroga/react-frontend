@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
+
 import './index.css';
 
 // eslint-disable-next-line
@@ -39,22 +43,78 @@ function InstrumentTableBodyRowStatusCell(props) {
   return <td className="review-table-body-row-field-status-{props.status}"></td>
 }
 
-function InstrumentTableBodyRow(props) {
-  return (
-    <tr className="review-table-body-row">
-      <InstrumentTableBodyRowStatusCell status={props.instrument.status} />
-      {props.instrument.fields.map(function(field, i) {
-        return <InstrumentTableBodyRowCell key={i} field={field}/>
-      })}
-    </tr>
-  )
+class InstrumentDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {open: false};
+  }
+
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+  render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        keyboardFocused={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
+    return (
+      <div>
+        <Dialog
+          title="Dialog With Actions"
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
+        >
+          The actions in this window were passed in as an array of React objects.
+        </Dialog>
+      </div>
+    );
+  }
+}
+
+class InstrumentTableBodyRow extends React.Component {
+  handleClick() {
+    this.props.modal_open=true
+    this.props.acitve_instrument=this.props.instrument
+  }
+  render() {
+    return (
+      <tr className="review-table-body-row" onClick={() => this.handleClick()}>
+        <InstrumentTableBodyRowStatusCell status={this.props.instrument.status} />
+        {this.props.instrument.fields.map(function(field, i) {
+          return <InstrumentTableBodyRowCell key={i} field={field}/>
+        })}
+      </tr>
+    )
+  }
 }
 
 function InstrumentTableBody(props) {
   return (
     <tbody className="review-table-body">
       {props.instruments.map(function(instrument, i) {
-        return <InstrumentTableBodyRow key={i} instrument={instrument} />
+        return <InstrumentTableBodyRow
+          key={i}
+          instrument={instrument}
+          modal_open={props.modal_open}
+          acitve_instrument={props.acitve_instrument}
+        />
       })}
     </tbody>
   )
@@ -85,6 +145,8 @@ class InstrumentTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      acitve_instrument: false,
+      modal_open: false,
       report: {
         headings: ["Tech record ID", "Name"],
         instruments: instruments_json,
@@ -100,15 +162,23 @@ class InstrumentTable extends React.Component {
 
   render() {
     return (
-      <table className="review-table">
-        <InstrumentTableHead
-            headings={this.state.report.headings}
+      <div>
+        <table className="review-table">
+          <InstrumentTableHead
+              headings={this.state.report.headings}
+          />
+          <InstrumentTableBody
+            instruments={this.state.report.instruments}
+            modal_open={this.state.modal_open}
+            acitve_instrument={this.state.acitve_instrument}
+            onClick={(i) => this.handleClick(i)}
+          />
+        </table>
+        <InstrumentDialog
+          modal_open={this.state.modal_open}
+          acitve_instrument={this.state.acitve_instrument}
         />
-        <InstrumentTableBody
-          instruments={this.state.report.instruments}
-          onClick={(i) => this.handleClick(i)}
-        />
-      </table>
+      </div>
     )
   }
 }
