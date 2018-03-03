@@ -43,8 +43,8 @@ function InstrumentTableBodyRow(props) {
   return (
     <tr className="review-table-body-row">
       <InstrumentTableBodyRowStatusCell status={props.instrument.status} />
-      {props.instrument.fields.map(function(field, key) {
-        return <InstrumentTableBodyRowCell field={field}/>
+      {props.instrument.fields.map(function(field, i) {
+        return <InstrumentTableBodyRowCell key={i} field={field}/>
       })}
     </tr>
   )
@@ -53,8 +53,8 @@ function InstrumentTableBodyRow(props) {
 function InstrumentTableBody(props) {
   return (
     <tbody className="review-table-body">
-      {props.instruments.map(function(instrument, key) {
-        return <InstrumentTableBodyRow instrument={instrument} />
+      {props.instruments.map(function(instrument, i) {
+        return <InstrumentTableBodyRow key={i} instrument={instrument} />
       })}
     </tbody>
   )
@@ -73,8 +73,8 @@ function InstrumentTableHead(props) {
     <thead className="review-table-head">
       <tr className="review-table-head-row">
         <th></th>
-        {props.headings.map(function(heading, key) {
-          return <InstrumentTableHeadRowCell heading={heading}/>
+        {props.headings.map(function(heading, i) {
+          return <InstrumentTableHeadRowCell key={i} heading={heading}/>
         })}
       </tr>
     </thead>
