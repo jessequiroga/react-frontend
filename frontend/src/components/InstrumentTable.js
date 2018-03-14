@@ -53,22 +53,59 @@ function InstrumentTableBodyRowStatusCell(props) {
   return <td className={"review-table-body-row-field-status-" + props.status}></td>
 }
 
-function InstrumentTableBodyRow(props) {
-  return (
-    <tr className="review-table-body-row" onClick={(i) => props.trHandler(props.index)}>
-      <InstrumentTableBodyRowStatusCell status={props.instrument.status} />
-      {props.instrument.fields.map(function(field, i) {
-        return <InstrumentTableBodyRowCell key={i} field={field}/>
-      })}
-    </tr>
-  )
+class InstrumentTableBodyRow extends React.Component {
+  state = {
+    open: false,
+  };
+
+  handleOpen = () => {
+    this.setState({open: true});
+  };
+
+  handleClose = () => {
+    this.setState({open: false});
+  };
+
+  render() {
+    const actions = [
+      <FlatButton
+        label="Cancel"
+        primary={true}
+        onClick={this.handleClose}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        keyboardFocused={true}
+        onClick={this.handleClose}
+      />,
+    ];
+
+    return (
+        <tr className="review-table-body-row" onClick={this.handleOpen}>
+          <InstrumentTableBodyRowStatusCell status={this.props.instrument.status} />
+          {this.props.instrument.fields.map(function(field, i) {
+            return <InstrumentTableBodyRowCell key={i} field={field}/>
+          })}
+          <Dialog
+            title="Dialog With Actions"
+            actions={actions}
+            modal={false}
+            open={this.state.open}
+            onRequestClose={this.handleClose}
+          >
+            The actions in this window were passed in as an array of React objects.
+          </Dialog>
+        </tr>
+    );
+  }
 }
 
 function InstrumentTableBody(props) {
   return (
     <tbody className="review-table-body">
       {props.instruments.map(function(instrument, i) {
-        return <InstrumentTableBodyRow key={i} index={i} instrument={instrument} trHandler={props.trHandler}/>
+        return <InstrumentTableBodyRow key={i} instrument={instrument}/>
       })}
     </tbody>
   )
@@ -95,6 +132,7 @@ export default class InstrumentTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalActive: false,
       activeInstrument: null,
       report: {
         headings: ["Tech record ID", "Name"],
@@ -102,14 +140,15 @@ export default class InstrumentTable extends React.Component {
       },
     };
 
-    this.handleClick = this.handleClick.bind(this)
+    // this.handleClick = this.handleClick.bind(this)
   }
 
-  handleClick(index) {
-    // Sets the active insturment for the modal, and triggers modal
-    const instrument = this.state.report.instruments[index];
-    this.state.activeInstrument = instrument;
-  }
+  // handleClick(index) {
+  //   // Sets the active insturment for the modal, and triggers modal
+  //   const instrument = this.state.report.instruments[index];
+  //   this.state.activeInstrument = instrument;
+  //   this.state.modalActive = true;
+  // }
 
   render() {
     return (
@@ -120,8 +159,6 @@ export default class InstrumentTable extends React.Component {
           />
           <InstrumentTableBody
             instruments={this.state.report.instruments}
-            acitve_instrument={this.state.acitve_instrument}
-            trHandler={this.handleClick}
           />
         </table>
       </div>
