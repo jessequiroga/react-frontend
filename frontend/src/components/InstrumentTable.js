@@ -54,9 +54,7 @@ function InstrumentTableBodyRowStatusCell(props) {
 }
 
 class InstrumentTableBodyRow extends React.Component {
-  state = {
-    open: false,
-  };
+  state = {open: false};
 
   handleOpen = () => {
     this.setState({open: true});
@@ -69,16 +67,10 @@ class InstrumentTableBodyRow extends React.Component {
   render() {
     const actions = [
       <FlatButton
-        label="Cancel"
+        label="Close"
         primary={true}
         onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.handleClose}
-      />,
+      />
     ];
 
     return (
