@@ -1,10 +1,20 @@
 version: '3'
 services:
   frontend:
-    image: node:latest
-    command: npm start
+    build:
+      context: ./
+      dockerfile: /Dockerfile.frontend
+    command: make run
     ports:
       - 3000:3000
     volumes:
-      - ./frontend:/usr/src
+      - ./apps/frontend ./
+    working_dir: /usr/src
+  backend:
+    build:
+      context: ./
+      dockerfile: /Dockerfile.backend
+    command: make run
+    volumes:
+      - ./apps/backend ./
     working_dir: /usr/src
