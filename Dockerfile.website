@@ -1,0 +1,3 @@
+MAINTAINER Mark McConnell <mjmcconnell.dev@gmail.com>
+
+FROM node:latest

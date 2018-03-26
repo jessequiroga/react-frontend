@@ -131,16 +131,7 @@ export default class InstrumentTable extends React.Component {
         instruments: instruments_json,
       },
     };
-
-    // this.handleClick = this.handleClick.bind(this)
   }
-
-  // handleClick(index) {
-  //   // Sets the active insturment for the modal, and triggers modal
-  //   const instrument = this.state.report.instruments[index];
-  //   this.state.activeInstrument = instrument;
-  //   this.state.modalActive = true;
-  // }
 
   render() {
     return (
