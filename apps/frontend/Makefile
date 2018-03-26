@@ -1,11 +1,13 @@
+.PHONY: install build watch run
+
 install:
 	npm install
 
-build:
+build: install
 	npm run build
 
-watch:
+watch: install
 	npm run watch
 
-run:
+run: install
 	npm start

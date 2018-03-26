@@ -1,3 +1,8 @@
+FROM node:latest
 MAINTAINER Mark McConnell <mjmcconnell.dev@gmail.com>
 
-FROM node:latest
+WORKDIR /usr/src
+
+COPY apps/frontend ./
+
+CMD make run
