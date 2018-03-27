@@ -4,16 +4,20 @@ image: docker:latest
 services:
   - docker:dind
 
-before_script:
-  - apk update
-  - apk upgrade
-  - apk add python python-dev py-pip build-base
-  - pip install docker-compose
+stages:
+  - test
+  - build
+  - deploy
 
 # Build out the local docker files using the docker-compose tool and docker-compose.yaml file
 build:
   stage: build
   script:
+
+    - apk update
+    - apk upgrade
+    - apk add python python-dev py-pip build-base
+    - pip install docker-compose
     - docker-compose build
 
 # Run all tests via the Makefile
