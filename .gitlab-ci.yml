@@ -5,13 +5,10 @@ services:
   - docker:dind
 
 before_script:
-  - docker info
   - apk update
   - apk upgrade
   - apk add python python-dev py-pip build-base
   - pip install docker-compose
-
-
 
 # Build out the local docker files using the docker-compose tool and docker-compose.yaml file
 build:
