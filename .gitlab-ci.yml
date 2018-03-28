@@ -9,20 +9,18 @@ variables:
   FRONTEND_IMAGE_PATH: registry.gitlab.com/mjmcconnell.dev/react_playground/frontend
 
 stages:
-  - test
   - build
+  - test
   - deploy
-
-before_script:
-  - apk update
-  - apk upgrade
-  - apk add python python-dev py-pip build-base
-  - pip install docker-compose
 
 # Build out the local docker files using the docker-compose tool and docker-compose.yaml file
 build:
   stage: build
   script:
+    - apk update
+    - apk upgrade
+    - apk add python python-dev py-pip build-base
+    - pip install docker-compose
     - docker-compose build
 
 # Run all tests via the Makefile
@@ -43,5 +41,3 @@ deploy:
     # Push the images up to the container registry
     - docker push BACKEND_IMAGE_PATH:$CI_COMMIT_TAG"
     - docker push FRONTEND_IMAGE_PATH:$CI_COMMIT_TAG"
-  only:
-    - tags
