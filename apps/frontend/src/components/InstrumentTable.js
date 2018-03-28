@@ -3,14 +3,8 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 
-var instruments_json = [];
-
 function InstrumentTableBodyRowCell(props) {
-    return <td>{props.field.value}</td>
-}
-
-function InstrumentTableBodyRowStatusCell(props) {
-    return <td className={"review-table-body-row-field-status-" + props.status}></td>
+    return <td>{props.field}</td>
 }
 
 class InstrumentTableBodyRow extends React.Component {
@@ -34,21 +28,22 @@ class InstrumentTableBodyRow extends React.Component {
         ];
 
         return (
-                <tr className="review-table-body-row" onClick={this.handleOpen}>
-                    <InstrumentTableBodyRowStatusCell status={this.props.instrument.status} />
-                    {this.props.instrument.fields.map(function(field, i) {
-                        return <InstrumentTableBodyRowCell key={i} field={field}/>
-                    })}
-                    <Dialog
-                        title="Dialog With Actions"
-                        actions={actions}
-                        modal={false}
-                        open={this.state.open}
-                        onRequestClose={this.handleClose}
-                    >
-                        The actions in this window were passed in as an array of React objects.
-                    </Dialog>
-                </tr>
+            <tr className="review-table-body-row" onClick={this.handleOpen}>
+                {Object.keys(this.props.instrument).map(key =>
+                    <InstrumentTableBodyRowCell key={key} field={this.props.instrument[key]}/>
+                )}
+                <Dialog
+                    title="Dialog With Actions"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                >
+                    {Object.keys(this.props.instrument).map(key =>
+                        key + ': ' + this.props.instrument[key] + ', '
+                    )}
+                </Dialog>
+            </tr>
         );
     }
 }
@@ -56,9 +51,9 @@ class InstrumentTableBodyRow extends React.Component {
 function InstrumentTableBody(props) {
     return (
         <tbody className="review-table-body">
-            {props.instruments.map(function(instrument, i) {
-                return <InstrumentTableBodyRow key={i} instrument={instrument}/>
-            })}
+            {Object.keys(props.instruments).map(key =>
+                <InstrumentTableBodyRow key={key} instrument={props.instruments[key]}/>
+            )}
         </tbody>
     )
 }
@@ -71,7 +66,6 @@ function InstrumentTableHead(props) {
     return (
         <thead className="review-table-head">
             <tr className="review-table-head-row">
-                <th></th>
                 {props.headings.map(function(heading, i) {
                     return <InstrumentTableHeadRowCell key={i} heading={heading}/>
                 })}
@@ -86,10 +80,8 @@ export default class InstrumentTable extends React.Component {
         this.state = {
             modalActive: false,
             activeInstrument: null,
-            report: {
-                headings: ["Tech record ID", "Name"],
-                instruments: instruments_json,
-            },
+            headings: ["Tech record ID", "Name"],
+            instruments: [],
         };
     }
 
@@ -102,22 +94,9 @@ export default class InstrumentTable extends React.Component {
                 return response.json();
             })
             .then((response) => {
-                console.log(response);
-                // let chartData = {};
-                // response.trades.map(function(field) {
-                //     chartData[field.file_time] = {
-                //         file_time: field.file_time,
-                //         trades: field.count,
-                //     }
-                //     if (field.count) {
-                //         chartData[field.file_time]['no_messages'] = 0;
-                //     } else {
-                //         chartData[field.file_time]['no_messages'] = 1;
-                //     }
-                // })
-                // this.setState({chartData: chartData});
-                // this.setState({reportingStart: response.reporting_start});
-                // this.setState({reportingEnd: response.reporting_end});
+                if (response.status === 'ok') {
+                    this.setState({instruments: response.data});
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -132,12 +111,8 @@ export default class InstrumentTable extends React.Component {
         return (
             <div>
                 <table className="review-table">
-                    <InstrumentTableHead
-                            headings={this.state.report.headings}
-                    />
-                    <InstrumentTableBody
-                        instruments={this.state.report.instruments}
-                    />
+                    <InstrumentTableHead headings={this.state.headings} />
+                    <InstrumentTableBody instruments={this.state.instruments} />
                 </table>
             </div>
         )
