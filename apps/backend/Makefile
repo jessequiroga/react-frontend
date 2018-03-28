@@ -2,8 +2,7 @@
 
 run:
 	pip install -r requirements.txt -q
-	uwsgi --http :8080 --wsgi-file wsgi.py --callable app
-
+	uwsgi -s 0.0.0.0:8080 --protocol=http --manage-script-name --mount /=wsgi:app --py-autoreload 1
 
 test:
 	echo 'TESTS RUNNING'

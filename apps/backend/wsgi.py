@@ -1,10 +1,35 @@
-# third-party imports
+# # third-party imports
+# from flask import Flask
+#
+# from flask.ext.cors import CORS
+
+
+# app = Flask(__name__)
+# cors = CORS(app, resources={r"/": {"origins": "*"}})
+# app.config['CORS_HEADERS'] = 'Content-Type'
+
 from flask import Flask
+from flask import jsonify
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route('/')
+mock_data = {
+    'field_1': 'Hello',
+    'field_2': 'World',
+}
+
+
+@app.route("/")
 def index():
-    return 'Hello world'
+    return jsonify({
+        'status': 'ok',
+        'data': {i: mock_data for i in range(10)}
+    })
+
+
+if __name__ == "__main__":
+    app.run()

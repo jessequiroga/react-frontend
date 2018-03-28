@@ -10,8 +10,6 @@ services:
     ports:
       - 3000:3000
     working_dir: /usr/src
-    links:
-      - backend
     command: make run
 
   backend:
@@ -20,5 +18,7 @@ services:
       dockerfile: /Dockerfile.backend
     volumes:
       - ./apps/backend:/usr/src
+    ports:
+      - 8080:8080
     working_dir: /usr/src
     command: make run
