@@ -33,11 +33,11 @@ deploy:
     # Log into gitlab docker container registry
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
     # Build the latest images using the current git tag
-    - docker build --pull -t "$CI_REGISTRY:/backend:$CI_COMMIT_TAG"  . --file=Dockerfile.backend
-    - docker build --pull -t "$CI_REGISTRY:/frontend:$CI_COMMIT_TAG"  . --file=Dockerfile.frontend
+    - docker build --pull -t "$CI_REGISTRY/mjmcconnell.dev/react_playground:/backend:$CI_COMMIT_TAG"  . --file=Dockerfile.backend
+    - docker build --pull -t "$CI_REGISTRY/mjmcconnell.dev/react_playground:/frontend:$CI_COMMIT_TAG"  . --file=Dockerfile.frontend
     # Push the images up to the container registry
-    - docker push "$CI_REGISTRY:/backend:$CI_COMMIT_TAG"
-    - docker push "$CI_REGISTRY:/frontend:$CI_COMMIT_TAG"
+    - docker push "$CI_REGISTRY/mjmcconnell.dev/react_playground:/backend:$CI_COMMIT_TAG"
+    - docker push "$CI_REGISTRY/mjmcconnell.dev/react_playground:/frontend:$CI_COMMIT_TAG"
   only:
     - tags
 
