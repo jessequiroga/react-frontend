@@ -86,7 +86,7 @@ export default class InstrumentTable extends React.Component {
     }
 
     loadTrades = () => {
-        return fetch('http://localhost:8080')
+        return fetch('/api')
             .then((response) => {
                 if (!response.ok) {
                     throw Error(response.statusText);

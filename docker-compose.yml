@@ -23,8 +23,6 @@ services:
     volumes:
       - ./apps/frontend:/usr/src
     working_dir: /usr/src
-    ports:
-      - 3000:3000
     command: make run
 
   backend:
@@ -34,6 +32,4 @@ services:
     volumes:
       - ./apps/backend:/usr/src
     working_dir: /usr/src
-    ports:
-      - 8000:8000
     command: make run
