@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  frontend:
+    image: node:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/usr/src
+    working_dir: /usr/src
+    command: bash
