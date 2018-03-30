@@ -9,6 +9,7 @@ module.exports = {
     publicPath: '/',
     filename: 'bundle.js'
   },
+  mode: 'development',
   devServer: {
     contentBase: './dist',
     compress: true,
