@@ -14,7 +14,7 @@ mock_data = {
 }
 
 
-@app.route("/")
+@app.route("/api")
 def index():
     return jsonify({
         'status': 'ok',

@@ -9,5 +9,5 @@ build: install
 watch: install
 	npm run watch
 
-run: install
+run:
 	npm start

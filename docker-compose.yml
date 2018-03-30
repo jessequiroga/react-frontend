@@ -9,8 +9,11 @@ services:
     links:
       - frontend
       - backend
+    depends_on:
+      - frontend
+      - backend
     volumes:
-      - ./ops/ssl_certificates:/ssl_certificates:ro
+    #   - ./ops/ssl_certificates:/ssl_certificates:ro
       - ./ops/nginx/templates/default.conf:/etc/nginx/conf.d/default.conf
 
   frontend:
@@ -20,6 +23,8 @@ services:
     volumes:
       - ./apps/frontend:/usr/src
     working_dir: /usr/src
+    ports:
+      - 3000:3000
     command: make run
 
   backend:
@@ -29,4 +34,6 @@ services:
     volumes:
       - ./apps/backend:/usr/src
     working_dir: /usr/src
+    ports:
+      - 8000:8000
     command: make run
