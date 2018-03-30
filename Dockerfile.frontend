@@ -5,4 +5,6 @@ WORKDIR /usr/src
 
 COPY apps/frontend ./
 
+RUN npm install
+
 CMD make run

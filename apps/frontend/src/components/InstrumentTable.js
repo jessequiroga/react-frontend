@@ -36,7 +36,7 @@ class InstrumentTableBodyRow extends React.Component {
                     title="Dialog With Actions"
                     actions={actions}
                     modal={false}
-                    open={this.state.open}
+                    open={false}
                     onRequestClose={this.handleClose}
                 >
                     {Object.keys(this.props.instrument).map(key =>
