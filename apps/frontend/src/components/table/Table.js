@@ -69,6 +69,7 @@ export default class InstrumentTable extends React.Component {
                 });
             }
         }
+        this.setState({pageId: 0});
         this.setState({filteredInstruments: filteredInstruments}, () => {
             this.handlePageChange(1);
         });
