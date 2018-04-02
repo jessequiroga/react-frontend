@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import InstrumentTable from './components/InstrumentTable';
+import Table from './components/table/Table';
 
 import './index.css';
 
 const App = () => (
   <MuiThemeProvider>
-    <InstrumentTable />
+    <Table />
   </MuiThemeProvider>
 );
 
