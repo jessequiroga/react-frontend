@@ -1,16 +1,14 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import Button from 'material-ui/Button';
 
 
 export default class TableDialog extends React.Component {
     render() {
         const actions = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.props.handleClose}
-            />
+            <Button variant="raised" color="primary" onClick={this.props.handleClose}>
+                Close
+            </Button>
         ];
 
         return (

@@ -1,14 +1,14 @@
 import React from 'react';
-import {Card} from 'material-ui/Card';
-import {
-    Table,
-    TableRow,
-    TableRowColumn,
+import Card from 'material-ui/Card';
+import Table, {
+    TableHead,
     TableBody,
-    TableHeader,
-    TableHeaderColumn,
+    TableRow,
+    TableCell,
 } from 'material-ui/Table';
+
 import PaginationControls from './PaginationControls.js'
+import Filters from './Filters.js'
 import TableDialog from './TableDialog.js'
 
 
@@ -21,7 +21,7 @@ class TableBodyRow extends React.Component {
         return (
             <TableRow className="review-table-body-row" onClick={this.handleClick}>
                 {Object.keys(this.props.instrument).map(key =>
-                    <TableRowColumn key={key} >{this.props.instrument[key]}</TableRowColumn>
+                    <TableCell key={key} >{this.props.instrument[key]}</TableCell>
                 )}
             </TableRow>
         );
@@ -52,16 +52,19 @@ export default class InstrumentTable extends React.Component {
         this.setState({modalOpen: false});
     };
 
-    handlePaginationChange = (event) = (filter, value) => {
+    handleFilterChange = (event) = (filter, value) => {
         let instruments = this.state.instruments;
         let filteredInstruments = {}
         if (filter === 'fooBar') {
-            Object.keys(instruments).forEach(function(key) {
-                if (instruments[key].field_3 === value) {
-                    console.log(instruments[key].field_3);
-                    filteredInstruments[key] = instruments[key];
-                }
-            });
+            if (value === 'all') {
+                filteredInstruments = instruments;
+            } else {
+                Object.keys(instruments).forEach(function(key) {
+                    if (instruments[key].field_3 === value) {
+                        filteredInstruments[key] = instruments[key];
+                    }
+                });
+            }
         }
         this.setState({filteredInstruments: filteredInstruments}, () => {
             this.handlePageChange(1);
@@ -114,17 +117,13 @@ export default class InstrumentTable extends React.Component {
             <div>
                 <Card>
                     <Table className="review-table">
-                        <TableHeader
-                            className="review-table-head"
-                            displaySelectAll={false}
-                            adjustForCheckbox={false}
-                        >
+                        <TableHead className="review-table-head">
                             <TableRow className="review-table-head-row">
                                 {this.state.headings.map(function(heading, i) {
-                                    return <TableHeaderColumn key={i} >{heading}</TableHeaderColumn>
+                                    return <TableCell key={i} >{heading}</TableCell>
                                 })}
                             </TableRow>
-                        </TableHeader>
+                        </TableHead>
                         <TableBody className="review-table-body">
                             {Object.keys(this.state.paginatedInstruments).map(key =>
                                 <TableBodyRow
@@ -137,13 +136,7 @@ export default class InstrumentTable extends React.Component {
                     </Table>
                 </Card>
 
-                <PaginationControls handlePaginationChange={this.handlePaginationChange}/>
-
-                <TableDialog
-                    instrument={this.state.activeInstrument}
-                    open={this.state.modalOpen}
-                    handleClose={this.handleModalClose}
-                />
+                <Filters handleFilterChange={this.handleFilterChange}/>
             </div>
         )
     }

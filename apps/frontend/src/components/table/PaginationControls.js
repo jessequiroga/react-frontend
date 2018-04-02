@@ -1,30 +1,28 @@
 import React from 'react';
 import {Card, CardContent} from 'material-ui/Card';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+
 
 
 
 export default class PaginationControls extends React.Component {
     state = {
-        fooBar: ''
+        pageId: 1
     }
-    handleFooBarChange = (event, index, value) => {
-        this.setState({fooBar: value})
-        this.props.handlePaginationChange('fooBar', value);
+    handlePageChange = (event, index, value) => {
+        console.log(event, index, value);
+        // this.setState({fooBar: value})
+        // this.props.handlePageChange(pageId);
     }
 
     render() {
         return (
             <Card>
-                <SelectField
-                    floatingLabelText="Foo/Bar"
-                    value={this.state.fooBar}
-                    onChange={this.handleFooBarChange}
-                >
-                    <MenuItem value="foo" primaryText="Foo" />
-                    <MenuItem value="bar" primaryText="Bar" />
-                </SelectField>
+                <Button className="graph-card-action-previous" onClick={this.handlePreviousClick} variant="raised" color="primary" size="small">
+                    Previous
+                </Button>
+                <Button className="graph-card-action-next" onClick={this.handleNextClick} variant="raised" color="primary" size="small">
+                    Next
+                </Button>
             </Card>
         )
     }
