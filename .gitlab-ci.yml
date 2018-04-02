@@ -19,15 +19,6 @@ test-be:
     - docker build . -f Dockerfile.backend -t backend
     - docker run -i --volume $(pwd)/apps/backend:/usr/src backend make test
 
-build-fe:
-  stage: build
-  script:
-    # Build out the frontend source files using the docker file
-    - docker build . -f Dockerfile.frontend -t frontend
-    - docker run -i --volume $(pwd)/apps/frontend:/usr/src frontend make build
-  only:
-    - tags
-
 push-backend:
   stage: deploy
   script:
@@ -42,11 +33,13 @@ push-backend:
 
 push-frontend:
   stage: deploy
-  image: python:latest
   script:
+    # Build out the frontend source files using the docker file
+    - docker build . -f Dockerfile.frontend -t frontend
+    - docker run -i --volume $(pwd)/apps/frontend:/usr/src frontend make build
     # Install the AWS cli tool from python
     - pip install awscli
     # Push all the frontend build assets to the S3 bucket
-    - aws s3 cp ./apps/frontend/dist/ s3://mjmcconnell-react-playground/ --recursive --include "*"
+    - aws s3 cp ./apps/frontend/dist/ s3://mjmcconnell-react-playground/ --recursive --exclude ".gitignore"
   only:
     - tags
