@@ -38,6 +38,9 @@ push-frontend:
     - docker build . -f Dockerfile.frontend -t frontend
     - docker run -i --volume $(pwd)/apps/frontend:/usr/src frontend make build
     # Install the AWS cli tool from python
+    - apk update
+    - apk upgrade
+    - apk add py-pip
     - pip install awscli
     # Push all the frontend build assets to the S3 bucket
     - aws s3 cp ./apps/frontend/dist/ s3://mjmcconnell-react-playground/ --recursive --exclude ".gitignore"
