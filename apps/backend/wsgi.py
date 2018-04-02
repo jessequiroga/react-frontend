@@ -10,6 +10,7 @@ def get_mock_data(i):
     return {
         'field_1': f'Hello {i}',
         'field_2': f'World {i}',
+        'field_3': 'foo' if i % 2 else 'bar',
     }
 
 
@@ -17,7 +18,7 @@ def get_mock_data(i):
 def index():
     return jsonify({
         'status': 'ok',
-        'data': {i: get_mock_data(i) for i in range(10)}
+        'data': {i: get_mock_data(i) for i in range(100)}
     })
 
 

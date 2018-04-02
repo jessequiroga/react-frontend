@@ -10,9 +10,11 @@ export default class InstrumentTable extends React.Component {
         super(props);
         this.state = {
             modalOpen: false,
+            pageId: 1,
             activeInstrument: {},
-            headings: ["Tech record ID", "Name"],
+            headings: ["Tech record ID", "Name", "foo/bar"],
             instruments: [],
+            paginatedInstruments: [],
         };
     }
 
@@ -25,6 +27,23 @@ export default class InstrumentTable extends React.Component {
         this.setState({modalOpen: false});
     };
 
+    handlePageChange = (event) = (pageId) => {
+        let limit = 20;
+        let bottomIndex = (pageId - 1) * limit;
+        let topIndex = bottomIndex + limit;
+        let instruments = this.state.instruments
+
+        let subKeys = Object.keys(instruments).slice(bottomIndex, topIndex);
+
+        let paginatedInstruments = {};
+        subKeys.forEach(function(key) {
+            console.log(key);
+            paginatedInstruments[key] = instruments[key];
+        });
+
+        this.setState({paginatedInstruments: paginatedInstruments});
+    }
+
     loadTrades = () => {
         return fetch('/api')
             .then((response) => {
@@ -36,6 +55,7 @@ export default class InstrumentTable extends React.Component {
             .then((response) => {
                 if (response.status === 'ok') {
                     this.setState({instruments: response.data});
+                    this.handlePageChange(1);
                 }
             })
             .catch((err) => {
@@ -53,7 +73,7 @@ export default class InstrumentTable extends React.Component {
                 <table className="review-table">
                     <TableHeader headings={this.state.headings} />
                     <TableBody
-                        instruments={this.state.instruments}
+                        instruments={this.state.paginatedInstruments}
                         handleRowClick={this.handleRowClick}
                     />
                 </table>
