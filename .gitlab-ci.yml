@@ -6,32 +6,47 @@ services:
 
 variables:
   BACKEND_IMAGE_PATH: registry.gitlab.com/mjmcconnell.dev/react_playground/backend
-  FRONTEND_IMAGE_PATH: registry.gitlab.com/mjmcconnell.dev/react_playground/frontend
 
 stages:
   - test
+  - build
   - deploy
 
 # Run all tests via the Makefile
-test:
+test-be:
   stage: test
   script:
-    - apk update
-    - apk upgrade
-    - apk add python python-dev py-pip build-base
-    - pip install docker-compose
-    - make test
+    - docker build . -f Dockerfile.backend -t backend
+    - docker run -i --volume $(pwd)/apps/backend:/usr/src backend make test
 
-deploy:
+build-fe:
+  stage: build
+  script:
+    # Build out the frontend source files using the docker file
+    - docker build . -f Dockerfile.frontend -t frontend
+    - docker run -i --volume $(pwd)/apps/frontend:/usr/src frontend make build
+  only:
+    - tags
+
+push-backend:
   stage: deploy
   script:
     # Log into gitlab docker container registry
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-    # Build the latest images using the current git tag
+    # Build the latest backend image using the current git tag
     - docker build -t $BACKEND_IMAGE_PATH:$CI_COMMIT_TAG . --file=Dockerfile.backend
-    - docker build -t $FRONTEND_IMAGE_PATH:$CI_COMMIT_TAG . --file=Dockerfile.frontend
-    # Push the images up to the container registry
+    # Push the image up to the container registry
     - docker push $BACKEND_IMAGE_PATH:$CI_COMMIT_TAG
-    - docker push $FRONTEND_IMAGE_PATH:$CI_COMMIT_TAG
+  only:
+    - tags
+
+push-frontend:
+  stage: deploy
+  image: python:latest
+  script:
+    # Install the AWS cli tool from python
+    - pip install awscli
+    # Push all the frontend build assets to the S3 bucket
+    - aws s3 cp ./apps/frontend/dist/ s3://mjmcconnell-react-playground/ --recursive --include "*"
   only:
     - tags

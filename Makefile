@@ -3,7 +3,10 @@
 run:
 	docker-compose up
 
-build-fe:
+install-fe:
 	docker-compose run --rm frontend make install
+
+build-fe:
+	docker-compose run --rm frontend make build
 
 test:
