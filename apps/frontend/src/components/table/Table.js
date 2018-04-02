@@ -5,6 +5,8 @@ import Table, {
     TableBody,
     TableRow,
     TableCell,
+    TableFooter,
+    TablePagination,
 } from 'material-ui/Table';
 
 import PaginationControls from './PaginationControls.js'
@@ -34,7 +36,8 @@ export default class InstrumentTable extends React.Component {
         super(props);
         this.state = {
             modalOpen: false,
-            pageId: 1,
+            pageId: 0,
+            rowsPerPage: 10,
             activeInstrument: {},
             headings: ["Tech record ID", "Name", "foo/bar"],
             instruments: {},
@@ -72,9 +75,8 @@ export default class InstrumentTable extends React.Component {
     };
 
     handlePageChange = (event) = (pageId) => {
-        let limit = 10;
-        let bottomIndex = (pageId - 1) * limit;
-        let topIndex = bottomIndex + limit;
+        let bottomIndex = (pageId) * this.state.rowsPerPage;
+        let topIndex = bottomIndex + this.state.rowsPerPage;
         let instruments = this.state.filteredInstruments;
 
         let subKeys = Object.keys(instruments).slice(bottomIndex, topIndex);
@@ -99,7 +101,7 @@ export default class InstrumentTable extends React.Component {
                 if (response.status === 'ok') {
                     this.setState({instruments: response.data});
                     this.setState({filteredInstruments: response.data}, () => {
-                        this.handlePageChange(1);
+                        this.handlePageChange(0);
                     });
                 }
             })
@@ -110,11 +112,24 @@ export default class InstrumentTable extends React.Component {
 
     componentDidMount() {
         this.loadTrades();
-    }
+    };
+    handleChangePage = (event, pageId) => {
+        this.setState({pageId}, () => {
+            this.handlePageChange(this.state.pageId);
+        });
+    };
+    handleChangeRowsPerPage = event => {
+        this.setState({rowsPerPage: event.target.value}, () => {
+            this.handlePageChange(this.state.pageId);
+        });
+    };
 
     render() {
         return (
             <div>
+
+                <Filters handleFilterChange={this.handleFilterChange}/>
+
                 <Card>
                     <Table className="review-table">
                         <TableHead className="review-table-head">
@@ -128,15 +143,25 @@ export default class InstrumentTable extends React.Component {
                             {Object.keys(this.state.paginatedInstruments).map(key =>
                                 <TableBodyRow
                                     key={key}
-                                    instrument={this.state.instruments[key]}
+                                    instrument={this.state.paginatedInstruments[key]}
                                     handleRowClick={this.handleRowClick}
                                 />
                             )}
                         </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination
+                                    colSpan={3}
+                                    count={Object.keys(this.state.filteredInstruments).length}
+                                    rowsPerPage={this.state.rowsPerPage}
+                                    page={this.state.pageId}
+                                    onChangePage={this.handleChangePage}
+                                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                                />
+                            </TableRow>
+                        </TableFooter>
                     </Table>
                 </Card>
-
-                <Filters handleFilterChange={this.handleFilterChange}/>
 
                 <TableDialog
                     instrument={this.state.activeInstrument}
