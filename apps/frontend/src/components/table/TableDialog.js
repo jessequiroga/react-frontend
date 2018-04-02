@@ -1,27 +1,34 @@
 import React from 'react';
-import Dialog from 'material-ui/Dialog';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui/Dialog';
 import Button from 'material-ui/Button';
 
 
 export default class TableDialog extends React.Component {
     render() {
-        const actions = [
-            <Button variant="raised" color="primary" onClick={this.props.handleClose}>
-                Close
-            </Button>
-        ];
-
         return (
             <Dialog
-                title="Dialog With Actions"
-                actions={actions}
-                modal={false}
                 open={this.props.open}
-                onRequestClose={this.props.handleClose}
+                onClose={this.props.handleClose}
+                aria-labelledby="form-dialog-title"
             >
-                {Object.keys(this.props.instrument).map(key =>
-                    key + ': ' + this.props.instrument[key] + ', '
-                )}
+                <DialogTitle id="form-dialog-title">Dialog With Actions</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        {Object.keys(this.props.instrument).map(key =>
+                            key + ': ' + this.props.instrument[key] + ', '
+                        )}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={this.props.handleClose} color="primary">
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
         )
     }

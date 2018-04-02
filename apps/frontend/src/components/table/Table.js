@@ -137,6 +137,12 @@ export default class InstrumentTable extends React.Component {
                 </Card>
 
                 <Filters handleFilterChange={this.handleFilterChange}/>
+
+                <TableDialog
+                    instrument={this.state.activeInstrument}
+                    open={this.state.modalOpen}
+                    handleClose={this.handleModalClose}
+                />
             </div>
         )
     }
